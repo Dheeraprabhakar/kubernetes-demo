@@ -4,11 +4,13 @@ kind: Service
 metadata:
   name: kubernetes-demo-svc
 spec:
+  type: NodePort
   selector:
     app: kubernetes-demo
   ports:
     - port: 8081
-      targetPort: 8081
+      nodePort: 30001
+      #targetPort: 8081
 
 ---
 apiVersion: apps/v1
@@ -30,5 +32,8 @@ spec:
         name: kubernetes-demo-container
         env:
           - name: SIMPLE_VAR
-            value: "It works!"
+            valueFrom:
+              configMapKeyRef:
+                name: dev-cm
+                key: MESSAGE
 
